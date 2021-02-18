@@ -92,7 +92,7 @@ func sort() error {
 }
 
 func Test() {
-	fmt.Println("|***************************|\n1.插入(insert)\n2.查看所有成绩(query)\n3.更改数据(set)\n4.删除数据\n5.退出(quit)")
+	fmt.Println("|***************************|\n1.插入(insert)\n2.查看所有成绩(query)\n3.更改数据(set)\n4.删除数据\n5.退出(quit)\n|***************************|")
 	//进入循环判断
 	for true {
 		cm := ""

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"iniparser"
 	"json"
 	"list"
-	"manage"
 )
 
 func main() {
 	json.JsonTest()
 	list.ListTest()
-	manage.Test()
+	//	manage.Test()
+	iniparser.IniTest()
 }
