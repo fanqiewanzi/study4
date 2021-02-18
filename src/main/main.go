@@ -1,7 +1,11 @@
 package main
 
-import "json"
+import (
+	"json"
+	"list"
+)
 
-func main()  {
+func main() {
 	json.JsonTest()
+	list.ListTest()
 }
