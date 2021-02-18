@@ -44,7 +44,7 @@ func Parse(cf *IniConfig) error {
 				cf.section[section] = make(map[string]string)
 			}
 		} else {
-			bytes.SplitN()
+
 		}
 	}
 }
