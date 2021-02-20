@@ -1,0 +1,9 @@
+# study4
+
+json转化为结构体是在json文件夹中
+
+list的线程安全放在list文件夹中，除了加锁我找不到更好的方式了，我看了一下channle本身就是线程安全的，在传输过程中像java中的copyonwirte容器一样会复制一个样本来给线程，所以不给List加锁我觉得也可以
+
+学生成绩管理系统在manage文件夹里面
+
+Ini解析器就在iniparser文件夹里面，主要用的就是bytes的一些方法进行文件的读取
