@@ -3,11 +3,14 @@ package list
 import (
 	"errors"
 	"fmt"
+	"sync"
 )
 
 //定义两个常量一个用来存默认容量，一个用来存初始下标
 const defaultCapacity = 10
 const defaultSize = -1
+
+var mut sync.Mutex
 
 //动态数组结构
 //size	当前最后一个元素下标位置
@@ -79,6 +82,8 @@ func (array Array) Print() {
 
 //向list末尾加入元素，先检查容量是否足够再进行添加
 func (array *Array) Add(obj ...interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	array.check(len(obj))
 	for _, elem := range obj {
 		array.size++
@@ -89,6 +94,8 @@ func (array *Array) Add(obj ...interface{}) error {
 
 //向指定位置加入元素,要判断容量是否足够且目标位置存在再进行添加
 func (array *Array) Insert(location int, obj interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	if location <= 0 || location > array.size+1 {
 		return errors.New("下标超出")
 	}
@@ -103,6 +110,8 @@ func (array *Array) Insert(location int, obj interface{}) error {
 
 //向指定位置修改元素，要判断目标位置是否存在
 func (array *Array) Set(location int, obj interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	if location <= 0 || location > array.size+1 {
 		return errors.New("下标超出")
 	}
@@ -225,7 +234,8 @@ func (it *ArrayIterator) PreviousIndex() (interface{}, error) {
 
 //移除元素
 func (it *ArrayIterator) Remove() error {
-
+	mut.Lock()
+	defer mut.Unlock()
 	for i := it.end; i < it.array.size; i++ {
 		it.array.data[i] = it.array.data[i+1]
 	}
@@ -238,12 +248,16 @@ func (it *ArrayIterator) Remove() error {
 
 //在当前节点的前一个已经输出的节点赋值
 func (it *ArrayIterator) Set(elem interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	it.array.data[it.end] = elem
 	return nil
 }
 
 //在当前节点的前一个已经输出的节点添加元素
 func (it *ArrayIterator) Add(elem interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	if it.end < 0 {
 		return errors.New("列表为空")
 	}

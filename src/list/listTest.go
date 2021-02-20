@@ -8,6 +8,7 @@ import (
 
 var mutex sync.Mutex
 
+//这两个线程加Lock是因为要保证每个线程的所有元素都已打印完毕
 func groutine1(chs chan List) {
 	mutex.Lock()
 	defer mutex.Unlock()

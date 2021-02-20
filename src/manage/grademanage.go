@@ -9,12 +9,14 @@ import (
 
 var Db *sql.DB
 
+//表结构
 type student struct {
 	id    int     `Db:"id"`
 	name  string  `Db:"name"`
 	grade float32 `Db:"grade"`
 }
 
+//连接数据库初始化
 func init() {
 	var err error
 	Db, err = sql.Open("mysql", "root:123456@/student?charset=utf8mb4&parseTime=true")

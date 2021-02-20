@@ -28,6 +28,8 @@ type LinkedIterator struct {
 
 // 给链表末尾新增一个节点
 func (list *DoubleList) Add(obj ...interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	for _, elem := range obj {
 		p := new(Node)
 		p.data = elem
@@ -41,6 +43,8 @@ func (list *DoubleList) Add(obj ...interface{}) error {
 
 //向指定位置加入元素
 func (list *DoubleList) Insert(location int, obj interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	if location <= 0 || location > list.size {
 		return errors.New("位置超出")
 	}
@@ -63,6 +67,8 @@ func (list *DoubleList) Insert(location int, obj interface{}) error {
 
 //向指定位置修改元素
 func (list *DoubleList) Set(location int, obj interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	if location <= 0 || location > list.size {
 		return errors.New("位置超出")
 	}
@@ -246,6 +252,8 @@ func (it *LinkedIterator) PreviousIndex() (interface{}, error) {
 
 //移除上一个已经输出的元素
 func (it *LinkedIterator) Remove() error {
+	mut.Lock()
+	defer mut.Unlock()
 	p := it.end
 	p.pre.next = p.next
 	p.next.pre = p.pre
@@ -255,12 +263,16 @@ func (it *LinkedIterator) Remove() error {
 
 //在当前节点的前一个已经输出的节点赋值
 func (it *LinkedIterator) Set(elem interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	it.end.data = elem
 	return nil
 }
 
 //在当前节点的前一个已经输出的节点添加元素
 func (it *LinkedIterator) Add(elem interface{}) error {
+	mut.Lock()
+	defer mut.Unlock()
 	if it.end.pre == nil {
 		return errors.New("列表为空")
 	}

@@ -8,6 +8,9 @@ import (
 	"os"
 )
 
+//ini配置文件的数据结构
+//filename为文件位置
+//section则是一个以section名指向元素的map
 type IniConfig struct {
 	filename string
 	section  map[string]*IniSection
@@ -25,24 +28,18 @@ func Parse(cf *IniConfig) error {
 	//关闭文件
 	defer file.Close()
 	buf := bufio.NewReader(file)
-	section := "default"
+	section := ""
 	for {
 		//读取一行缓存
 		line, _, err := buf.ReadLine()
-
+		//读到文件结尾，退出循环
 		if err == io.EOF {
-			//读到文件结尾，退出循环
 			break
 		}
-		if bytes.Equal(line, []byte("")) {
-			//空行直接跳过循环
+		//空行或注释直接跳过循环
+		if bytes.Equal(line, []byte("")) || bytes.HasPrefix(line, []byte(";")) {
 			continue
 		}
-		if bytes.HasPrefix(line, []byte(";")) {
-			//注释行暂时不做处理
-			continue
-		}
-
 		// HasPrefix测试字符串是否以给定字符开头
 		// HasSuffix测试字符串是否以给定字符结尾
 		if bytes.HasPrefix(line, []byte("[")) && bytes.HasSuffix(line, []byte("]")) {
@@ -56,9 +53,11 @@ func Parse(cf *IniConfig) error {
 		} else {
 			//bytes.SplitN(s, sep []byte, n int)方法会返回以sep为基础将s字符串进行分割成n个子字符串
 			str := bytes.SplitN(line, []byte("="), 2)
+			//若是新的section就创建一个新的Map指向指针
 			if _, ok := cf.section[section]; !ok {
 				cf.section[section] = &IniSection{make(map[string]string)}
 			}
+			//将值赋给map
 			cf.section[section].elem[string(str[0])] = string(str[1])
 		}
 	}
@@ -66,7 +65,7 @@ func Parse(cf *IniConfig) error {
 }
 
 func IniTest() {
-	cf := &IniConfig{"C:\\Users\\BAZINGA\\Desktop\\demo.ini", make(map[string]*IniSection)}
+	cf := &IniConfig{"D:\\GoProject\\study4\\src\\iniparser\\demo.ini", make(map[string]*IniSection)}
 	Parse(cf)
 	for j, elem := range cf.section {
 		fmt.Println(j)
@@ -74,8 +73,4 @@ func IniTest() {
 			fmt.Println(i, ele)
 		}
 	}
-
 }
-
-//[tcp]
-//Port=   3309
